@@ -1,35 +1,17 @@
-import {createStore} from 'redux';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {createStore, bindActionCreators} from 'redux';
+import reducer from './reducer';
+import App from './components/app';
+import {Provider} from 'react-redux';
 
-
-const reducer = (state = 0, action) => { // должен быть чистой функцией - зависеть ТОЛЬКО от state, action
-    switch(action.type){
-        case 'INC':
-            return state + 1;
-        case 'DEC': 
-            return state - 1;
-        case 'RES': 
-            return 0;
-        default:
-            return state;
-    }
-}
-
-let count = document.getElementById('counter');
 const store = createStore(reducer);
 
-store.subscribe( () => { //подписка на action 
-    count.textContent = store.getState();
-})
+ReactDOM.render(
+    <Provider store={store}>
+        <App/>
+    </Provider>,
+    document.getElementById('root'));
 
 
-document.getElementById('inc').addEventListener('click', () => {
-    store.dispatch({type: 'INC'}); //cоздаем действие - action
-});
 
-document.getElementById('dec').addEventListener('click', () => {
-    store.dispatch({type: 'DEC'});
-});
-
-document.getElementById('res').addEventListener('click', () => {
-    store.dispatch({type: 'RES'});
-});
